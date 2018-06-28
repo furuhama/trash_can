@@ -5,3 +5,5 @@ authors = ["furuhama <furuhama@users.noreply.github.com>"]
 
 [dependencies]
 reqwest = "*"
+dotenv = "*"
+dotenv_codegen = "*"
