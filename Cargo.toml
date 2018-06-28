@@ -7,3 +7,5 @@ authors = ["furuhama <furuhama@users.noreply.github.com>"]
 reqwest = "*"
 dotenv = "*"
 dotenv_codegen = "*"
+serde_json = "*"
+nickel = "*"
