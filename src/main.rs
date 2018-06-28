@@ -1,3 +1,7 @@
+extern crate genki;
+
+use genki::http_client;
+
 fn main() {
-    println!("Hello, world!");
+    http_client::get_response();
 }
