@@ -28,11 +28,13 @@ impl<'a> Server<'a> {
     }
 
     fn generate_html(&self) -> String {
-        let mut html = String::from("<html><head><title>Genki -dairy info platform-</title><meta charset=\"utf-8\"></head><body>");
+        let mut html = String::from("<html><head><title>Genki -dairy info platform-</title><meta charset=\"utf-8\"><style> * { box-sizing: border-box; } .column { float: left; width: 50%; padding: 10px;} .row:after { content: \"\"; display: table; clear: both;}</style></head><body><div class=\"row\">");
 
         for content in &self.contents {
             html += &content.generate_html();
         }
+
+        html += "</div></body></html>";
 
         html
     }
@@ -52,7 +54,7 @@ impl<'a> Content<'a> {
     }
 
     pub fn generate_html(&self) -> String {
-        let mut html = String::from("<h1>") + &self.title_messsage + "</h1><ul>";
+        let mut html = String::from("<div class=\"column\"><h1>") + &self.title_messsage + "</h1><ul>";
 
         for json in self.posts {
             html += "<li><a href=\"";
@@ -61,7 +63,7 @@ impl<'a> Content<'a> {
             html += &json.get_title();
             html += "</a></li>";
         };
-        html += "</ul>";
+        html += "</ul></div>";
 
         html
     }
