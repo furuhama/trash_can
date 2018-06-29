@@ -48,8 +48,6 @@ impl Json {
             let title = child["title"].as_str().unwrap().to_string();
             let url = child["id"].as_u64().unwrap().to_string();
 
-            println!("{} {}", title, url);
-
             json_vec.push(Json::new(title, url, Media::HackerNews));
         }
 

@@ -273,17 +273,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "genki"
-version = "0.1.0"
-dependencies = [
- "dotenv 0.13.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "dotenv_codegen 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "nickel 0.10.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "reqwest 0.8.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde_json 1.0.22 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
 name = "groupable"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1155,6 +1144,17 @@ dependencies = [
 name = "traitobject"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "trash_can"
+version = "0.1.0"
+dependencies = [
+ "dotenv 0.13.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dotenv_codegen 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "nickel 0.10.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "reqwest 0.8.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_json 1.0.22 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "try-lock"

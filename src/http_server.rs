@@ -28,7 +28,7 @@ impl<'a> Server<'a> {
     }
 
     fn generate_html(&self) -> String {
-        let mut html = String::from("<html><head><title>Genki -dairy info platform-</title><meta charset=\"utf-8\"><style> * { box-sizing: border-box; } .column { float: left; width: 50%; padding: 10px;} .row:after { content: \"\"; display: table; clear: both;}</style></head><body><div class=\"row\">");
+        let mut html = String::from("<html><head><title>Trash Can</title><meta charset=\"utf-8\"><style> * { box-sizing: border-box; } .column { float: left; width: 50%; padding: 10px;} .row:after { content: \"\"; display: table; clear: both;}</style></head><body><div class=\"row\">");
 
         for content in &self.contents {
             html += &content.generate_html();

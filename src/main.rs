@@ -1,11 +1,11 @@
-extern crate genki;
+extern crate trash_can;
 extern crate dotenv;
 #[macro_use]
 extern crate dotenv_codegen;
 
-use genki::http_client;
-use genki::json_parser;
-use genki::http_server;
+use trash_can::http_client;
+use trash_can::json_parser;
+use trash_can::http_server;
 
 fn main() {
     // process for reddit
