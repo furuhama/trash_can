@@ -22,8 +22,8 @@ impl Json {
     }
 
     pub fn parse_as_reddit(json: String) -> Vec<Json> {
-        let v: Value = serde_json::from_str(&json).unwrap();
-        let children = &v["data"]["children"];
+        let value: Value = serde_json::from_str(&json).unwrap();
+        let children = &value["data"]["children"];
 
         let mut json_vec = Vec::<Json>::new();
 
@@ -37,9 +37,13 @@ impl Json {
         json_vec
     }
 
+    pub fn get_title(&self) -> String {
+        self.title.clone()
+    }
+
     pub fn get_url(&self) -> String {
         match self.media {
-            Media::Reddit => format!("{}{}", String::from("https://www.reddit.com"), self.url),
+            Media::Reddit => String::from("https://www.reddit.com") + self.url.as_str(),
             Media::HackerNews => { panic!("No Implement Error!"); String::from("hoge") }
         }
     }

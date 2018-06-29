@@ -12,9 +12,7 @@ fn main() {
 
     let jsons = json_parser::Json::parse_as_reddit(res);
 
-    for json in jsons {
-        println!("title: {}, url: {}", json.title, json.url);
-    };
+    let server = http_server::Server::new(&jsons);
 
-    http_server::wake_up();
+    server.wake_up();
 }
