@@ -28,7 +28,7 @@ pub fn get_response_hackernews(uri: &str) -> String {
         if i != 19 {
             json_for_return += ",";
         }
-    };
+    }
 
     json_for_return += "]";
 

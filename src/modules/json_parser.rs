@@ -61,7 +61,9 @@ impl Json {
     pub fn get_url(&self) -> String {
         match self.media {
             Media::Reddit => String::from("https://www.reddit.com") + self.url.as_str(),
-            Media::HackerNews => String::from("https://news.ycombinator.com/item?id=") + self.url.as_str(),
+            Media::HackerNews => {
+                String::from("https://news.ycombinator.com/item?id=") + self.url.as_str()
+            }
         }
     }
 }

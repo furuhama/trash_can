@@ -1,5 +1,5 @@
-use nickel::{Nickel, HttpRouter};
 use modules::json_parser::Json;
+use nickel::{HttpRouter, Nickel};
 
 #[derive(Debug)]
 pub struct TrashCan {}
@@ -13,9 +13,12 @@ impl TrashCan {
         let mut server = Nickel::new();
         let html = self.generate_html(trash);
 
-        server.get("/", middleware! { |_, _res|
-            html.as_str()
-        });
+        server.get(
+            "/",
+            middleware! { |_, _res|
+                html.as_str()
+            },
+        );
 
         server.listen("127.0.0.1:3000").unwrap();
     }
@@ -48,7 +51,8 @@ impl Trash {
     }
 
     pub fn generate_html(&self) -> String {
-        let mut html = String::from("<div class=\"column\"><h1>") + &self.title_messsage + "</h1><ul>";
+        let mut html =
+            String::from("<div class=\"column\"><h1>") + &self.title_messsage + "</h1><ul>";
 
         for json in &self.posts {
             html += "<li><a href=\"";
@@ -56,7 +60,7 @@ impl Trash {
             html += "\" target=\"_blank\">";
             html += &json.get_title();
             html += "</a></li>";
-        };
+        }
         html += "</ul></div>";
 
         html
