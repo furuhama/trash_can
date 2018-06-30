@@ -5,6 +5,7 @@ extern crate nickel;
 extern crate dotenv;
 #[macro_use]
 extern crate dotenv_codegen;
+#[allow(unused)]
 #[macro_use]
 extern crate log;
 

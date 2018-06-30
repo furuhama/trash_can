@@ -1,7 +1,27 @@
 use reqwest;
 use serde_json;
 use serde_json::Value;
-extern crate dotenv;
+use std::sync::{Arc, Mutex};
+use std::thread;
+use std::sync::mpsc;
+use std::time::Instant;
+
+// define macro to measure time
+macro_rules! measure {
+    ($x:expr) => {{
+        let start = Instant::now();
+        let expr_result = $x;
+        let end = start.elapsed();
+
+        println!(
+            "It took {}.{:03} sec to send request concurrently",
+            end.as_secs(),
+            end.subsec_millis()
+        );
+
+        expr_result
+    }};
+}
 
 pub fn get_response(uri: &str) -> String {
     let mut res = reqwest::get(uri).unwrap();
@@ -14,19 +34,53 @@ pub fn get_response(uri: &str) -> String {
 //
 // TODO: separate their responsibilities beuatifully
 pub fn get_response_hackernews(uri: &str) -> String {
+    let max = 20;
     // first http request (just get ids of posts)
     let raw_json = get_response(uri);
 
     // parse first http response & send request to get more info
     let value: Value = serde_json::from_str(&raw_json).unwrap();
-    let mut json_for_return = String::from("[");
-    for idx in 0..20 {
-        let id = value[idx].as_u64().unwrap().to_string();
-        let uri_tmp = dotenv!("HACKERNEWS_URI").to_string() + "/item/" + &id + ".json";
-        json_for_return += get_response(&uri_tmp).as_str();
+    let uri_head = dotenv!("HACKERNEWS_URI").to_string() + "/item/";
 
-        if idx != 19 {
-            json_for_return += ",";
+    // Try to do proecss concurrently.
+    // However it didn't get faster than it was a single thread.
+    // To send request(the line contains -> `get_response(&uri_tmp)`) may not be done concurrently
+    // in my expectation.
+    // TODO: try to solve this and make this function faster
+    let target = Arc::new(Mutex::new(vec![String::from(""); 20]));
+    let (tx, rx) = mpsc::channel();
+
+    measure!({
+        for idx in 0..max {
+            let (value, target, tx, uri_head) = (value.clone(), target.clone(), tx.clone(), uri_head.clone());
+
+            let id = value[idx].as_u64().unwrap().to_string();
+
+            thread::spawn(move || {
+                let mut target = target.lock().unwrap();
+                let uri_tmp = uri_head + &id + ".json";
+                target[idx] = get_response(&uri_tmp).as_str().to_string();
+
+                tx.send(()).unwrap();
+            });
+        }
+
+        for _ in 0..max {
+            rx.recv().unwrap();
+        }
+    });
+
+    let mut json_for_return = String::from("[");
+
+    let target = match (*target).lock() {
+        Ok(v) => v,
+        _ => panic!("hoge"),
+    };
+
+    for i in 0..max {
+        json_for_return += target[i].as_str();
+        if i != max - 1 {
+            json_for_return += " ,";
         }
     }
 
