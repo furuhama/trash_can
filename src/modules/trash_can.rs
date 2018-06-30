@@ -1,15 +1,15 @@
 use modules::json_parser::Json;
 use nickel::{HttpRouter, Nickel};
 
-#[derive(Debug)]
-pub struct TrashCan {}
+#[derive(Debug, Default)]
+pub struct TrashCan;
 
 impl TrashCan {
     pub fn new() -> Self {
-        Self {}
+        TrashCan
     }
 
-    pub fn wake_up(&self, trash: &Vec<Trash>) {
+    pub fn wake_up(&self, trash: &[Trash]) {
         let mut server = Nickel::new();
         let html = self.generate_html(trash);
 
@@ -23,7 +23,7 @@ impl TrashCan {
         server.listen("127.0.0.1:3000").unwrap();
     }
 
-    fn generate_html(&self, trash: &Vec<Trash>) -> String {
+    fn generate_html(&self, trash: &[Trash]) -> String {
         let mut html = String::from("<html><head><title>Trash Can</title><meta charset=\"utf-8\"><style> * { box-sizing: border-box; } .column { float: left; width: 50%; padding: 10px;} .row:after { content: \"\"; display: table; clear: both;}</style></head><body><div class=\"row\">");
 
         for content in trash {
@@ -45,8 +45,8 @@ pub struct Trash {
 impl Trash {
     pub fn new(title_messsage: String, posts: Vec<Json>) -> Self {
         Self {
-            title_messsage: title_messsage,
-            posts: posts,
+            title_messsage,
+            posts,
         }
     }
 

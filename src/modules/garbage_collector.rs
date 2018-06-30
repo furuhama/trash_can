@@ -31,8 +31,8 @@ impl GarbageCollector {
         let trash_can = trash_can::TrashCan::new();
 
         Self {
-            trash: trash,
-            trash_can: trash_can,
+            trash,
+            trash_can,
         }
     }
 
@@ -49,7 +49,7 @@ impl GarbageCollector {
                 println!(
                     "It took {}.{:03} sec to collect garbage from {}",
                     end.as_secs(),
-                    end.subsec_nanos() / 1_000_000,
+                    end.subsec_millis(),
                     $msg
                 );
 
@@ -60,7 +60,7 @@ impl GarbageCollector {
         measure!("Reddit", {
             // process for reddit
             let res = request_sender::get_response(dotenv!("REDDIT_URI"));
-            let jsons = json_parser::Json::parse_as_reddit(res);
+            let jsons = json_parser::Json::parse_as_reddit(&res);
             let trash = trash_can::Trash::new(String::from("Reddit best topics"), jsons);
             self.trash.push(trash);
         });
@@ -70,7 +70,7 @@ impl GarbageCollector {
             let res = request_sender::get_response_hackernews(
                 (dotenv!("HACKERNEWS_URI").to_string() + "/topstories.json").as_str(),
             );
-            let jsons = json_parser::Json::parse_as_hackernews(res);
+            let jsons = json_parser::Json::parse_as_hackernews(&res);
             let trash = trash_can::Trash::new(String::from("HackerNews best topics"), jsons);
             self.trash.push(trash);
         });

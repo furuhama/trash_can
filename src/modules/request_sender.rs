@@ -20,12 +20,12 @@ pub fn get_response_hackernews(uri: &str) -> String {
     // parse first http response & send request to get more info
     let value: Value = serde_json::from_str(&raw_json).unwrap();
     let mut json_for_return = String::from("[");
-    for i in 0..20 {
-        let id = value[i].as_u64().unwrap().to_string();
+    for idx in 0..20 {
+        let id = value[idx].as_u64().unwrap().to_string();
         let uri_tmp = dotenv!("HACKERNEWS_URI").to_string() + "/item/" + &id + ".json";
         json_for_return += get_response(&uri_tmp).as_str();
 
-        if i != 19 {
+        if idx != 19 {
             json_for_return += ",";
         }
     }

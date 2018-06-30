@@ -17,14 +17,14 @@ pub struct Json {
 impl Json {
     fn new(title: String, url: String, media: Media) -> Json {
         Json {
-            title: title,
-            url: url,
-            media: media,
+            title,
+            url,
+            media,
         }
     }
 
-    pub fn parse_as_reddit(json: String) -> Vec<Json> {
-        let value: Value = serde_json::from_str(&json).unwrap();
+    pub fn parse_as_reddit(json: &str) -> Vec<Json> {
+        let value: Value = serde_json::from_str(json).unwrap();
         let children = &value["data"]["children"];
 
         let mut json_vec = Vec::<Json>::new();
@@ -39,8 +39,8 @@ impl Json {
         json_vec
     }
 
-    pub fn parse_as_hackernews(json: String) -> Vec<Json> {
-        let value: Value = serde_json::from_str(&json).unwrap();
+    pub fn parse_as_hackernews(json: &str) -> Vec<Json> {
+        let value: Value = serde_json::from_str(json).unwrap();
 
         let mut json_vec = Vec::<Json>::new();
 
