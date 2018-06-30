@@ -1,20 +1,17 @@
 use nickel::{Nickel, HttpRouter};
 use modules::json_parser::Json;
 
-pub struct Server<'a> {
-    contents: Vec<Content<'a>>,
-}
+#[derive(Debug)]
+pub struct TrashCan {}
 
-impl<'a> Server<'a> {
+impl TrashCan {
     pub fn new() -> Self {
-        Self {
-            contents: Vec::<Content>::new(),
-        }
+        Self {}
     }
 
-    pub fn wake_up(&self) {
+    pub fn wake_up(&self, trash: &Vec<Trash>) {
         let mut server = Nickel::new();
-        let html = self.generate_html();
+        let html = self.generate_html(trash);
 
         server.get("/", middleware! { |_, _res|
             html.as_str()
@@ -23,14 +20,10 @@ impl<'a> Server<'a> {
         server.listen("127.0.0.1:3000").unwrap();
     }
 
-    pub fn add_content(&mut self, content: Content<'a>) {
-        self.contents.push(content);
-    }
-
-    fn generate_html(&self) -> String {
+    fn generate_html(&self, trash: &Vec<Trash>) -> String {
         let mut html = String::from("<html><head><title>Trash Can</title><meta charset=\"utf-8\"><style> * { box-sizing: border-box; } .column { float: left; width: 50%; padding: 10px;} .row:after { content: \"\"; display: table; clear: both;}</style></head><body><div class=\"row\">");
 
-        for content in &self.contents {
+        for content in trash {
             html += &content.generate_html();
         }
 
@@ -40,13 +33,14 @@ impl<'a> Server<'a> {
     }
 }
 
-pub struct Content<'a> {
+#[derive(Debug)]
+pub struct Trash {
     title_messsage: String,
-    posts: &'a Vec<Json>,
+    posts: Vec<Json>,
 }
 
-impl<'a> Content<'a> {
-    pub fn new(title_messsage: String, posts: &'a Vec<Json>) -> Self {
+impl Trash {
+    pub fn new(title_messsage: String, posts: Vec<Json>) -> Self {
         Self {
             title_messsage: title_messsage,
             posts: posts,
@@ -56,7 +50,7 @@ impl<'a> Content<'a> {
     pub fn generate_html(&self) -> String {
         let mut html = String::from("<div class=\"column\"><h1>") + &self.title_messsage + "</h1><ul>";
 
-        for json in self.posts {
+        for json in &self.posts {
             html += "<li><a href=\"";
             html += &json.get_url();
             html += "\" target=\"_blank\">";
