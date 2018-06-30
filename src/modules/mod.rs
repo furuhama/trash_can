@@ -1,9 +1,9 @@
-pub use self::http_client::*;
+pub use self::request_sender::*;
 pub use self::json_parser::*;
-pub use self::http_server::*;
+pub use self::trash_can::*;
 pub use self::garbage_collector::*;
 
-mod http_client;
-mod http_server;
+mod request_sender;
 mod json_parser;
+mod trash_can;
 pub mod garbage_collector;

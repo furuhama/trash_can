@@ -1,11 +1,13 @@
-use modules::{http_client, json_parser, http_server};
+use modules::{request_sender, json_parser, trash_can};
 use std::time::Instant;
 
-// TrashCan(server) と Trash(contents) の実体を持ち、二つを参照で繋げる役目
+// GarbageCollector is an interface b/w outer world and inner this library
+// GarbageCollector has TrashCan(server) and Trash(formatted contents),
+// and connects them by using a reference
 #[derive(Debug)]
 pub struct GarbageCollector {
-    trash: Vec<http_server::Trash>,
-    trash_can: http_server::TrashCan,
+    trash: Vec<trash_can::Trash>,
+    trash_can:trash_can::TrashCan,
 }
 
 impl GarbageCollector {
@@ -25,8 +27,8 @@ impl GarbageCollector {
     }
 
     fn new() -> Self {
-        let trash = Vec::<http_server::Trash>::new();
-        let trash_can = http_server::TrashCan::new();
+        let trash = Vec::<trash_can::Trash>::new();
+        let trash_can = trash_can::TrashCan::new();
 
         Self {
             trash: trash,
@@ -54,18 +56,18 @@ impl GarbageCollector {
 
         measure!("Reddit", {
             // process for reddit
-            let res = http_client::get_response(dotenv!("REDDIT_URI"));
+            let res = request_sender::get_response(dotenv!("REDDIT_URI"));
             let jsons = json_parser::Json::parse_as_reddit(res);
-            let trash = http_server::Trash::new(String::from("Reddit best topics"), jsons);
+            let trash = trash_can::Trash::new(String::from("Reddit best topics"), jsons);
             self.trash.push(trash);
         });
 
 
         measure!("HackerNews", {
             // process for hackernews
-            let res = http_client::get_response_hackernews((dotenv!("HACKERNEWS_URI").to_string() + "/topstories.json").as_str());
+            let res = request_sender::get_response_hackernews((dotenv!("HACKERNEWS_URI").to_string() + "/topstories.json").as_str());
             let jsons = json_parser::Json::parse_as_hackernews(res);
-            let trash = http_server::Trash::new(String::from("HackerNews best topics"), jsons);
+            let trash =trash_can::Trash::new(String::from("HackerNews best topics"), jsons);
             self.trash.push(trash);
         });
 
