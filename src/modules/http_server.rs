@@ -1,5 +1,5 @@
 use nickel::{Nickel, HttpRouter};
-use json_parser::Json;
+use modules::json_parser::Json;
 
 pub struct Server<'a> {
     contents: Vec<Content<'a>>,

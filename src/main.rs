@@ -3,9 +3,7 @@ extern crate dotenv;
 #[macro_use]
 extern crate dotenv_codegen;
 
-use trash_can::http_client;
-use trash_can::json_parser;
-use trash_can::http_server;
+use trash_can::modules::{http_client, json_parser, http_server};
 
 fn main() {
     // process for reddit
