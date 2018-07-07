@@ -5,6 +5,10 @@ authors = ["furuhama <furuhama@users.noreply.github.com>"]
 
 [dependencies]
 reqwest = "*"
+futures = "*"
+hyper = "*"
+tokio = "*"
+tokio-core = "*"
 dotenv = "*"
 dotenv_codegen = "*"
 serde_json = "*"

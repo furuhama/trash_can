@@ -76,5 +76,9 @@ impl GarbageCollector {
         });
 
         println!("============== Garbage collection finished ==============");
+
+        measure!("Re: HackerNews", {
+            request_sender::get_hackernews((dotenv!("HACKERNEWS_URI").to_string() + "/topstories.json").as_str());
+        });
     }
 }
