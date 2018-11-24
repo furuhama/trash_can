@@ -1,18 +1,18 @@
 use modules::{json_parser, request_sender, trash_can};
 use std::time::Instant;
 
-// GarbageCollector is an interface b/w outer world and inner this library
-// GarbageCollector has TrashCan(server) and Trash(formatted contents),
+// GarbageInfoCollector is an interface b/w outer world and inner this library
+// GarbageInfoCollector has TrashCan(server) and Trash(formatted contents),
 // and connects them by using a reference
 #[derive(Debug)]
-pub struct GarbageCollector {
+pub struct GarbageInfoCollector {
     trash: Vec<trash_can::Trash>,
     trash_can: trash_can::TrashCan,
 }
 
-impl GarbageCollector {
+impl GarbageInfoCollector {
     pub fn init() -> Self {
-        println!("Initializing GarbageCollector...");
+        println!("Initializing GarbageInfoCollector...");
 
         let mut gc = Self::new();
 
@@ -37,7 +37,7 @@ impl GarbageCollector {
     }
 
     fn init_contents(&mut self) {
-        println!("============== Garbage collection started ===============");
+        println!("============== Garbage Info collection started ===============");
 
         // define macro to measure time
         macro_rules! measure {
@@ -47,7 +47,7 @@ impl GarbageCollector {
                 let end = start.elapsed();
 
                 println!(
-                    "It took {}.{:03} sec to collect garbage from {}",
+                    "It took {}.{:03} sec to collect garbage info from {}",
                     end.as_secs(),
                     end.subsec_millis(),
                     $msg
@@ -75,7 +75,7 @@ impl GarbageCollector {
             self.trash.push(trash);
         });
 
-        println!("============== Garbage collection finished ==============");
+        println!("============== Garbage Info collection finished ==============");
 
         measure!("Re: HackerNews", {
             request_sender::get_hackernews((dotenv!("HACKERNEWS_URI").to_string() + "/topstories.json").as_str());

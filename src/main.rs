@@ -1,9 +1,9 @@
 extern crate trash_can;
 
-use trash_can::modules::garbage_collector::GarbageCollector;
+use trash_can::modules::garbage_info_collector::GarbageInfoCollector;
 
 fn main() {
-    let mut g_collector = GarbageCollector::init();
+    let mut collector = GarbageInfoCollector::init();
 
-    g_collector.work();
+    collector.work();
 }
